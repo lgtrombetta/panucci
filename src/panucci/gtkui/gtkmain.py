@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import logging
 import os.path
@@ -774,7 +774,7 @@ class PlayerTab(ObservableService, gtk.HBox):
                 gtkutil.generate_image('media-skip-forward.png'),
                 lambda: self.do_seek(self.config.getint('options', 'seek_long')),
                 gtkutil.generate_image("gtk-goto-last-ltr.png"),
-                self.playlist.next)
+                self.playlist.__next__)
         buttonbox.add(self.fforward_button)
 
         self.bookmarks_button = create_da(
@@ -950,7 +950,7 @@ class PlayerTab(ObservableService, gtk.HBox):
                  'album': self.album_label }
 
         # set the coverart
-        if tag_message.has_key('image') and tag_message['image'] is not None:
+        if 'image' in tag_message and tag_message['image'] is not None:
             value = tag_message['image']
 
             pbl = gtk.gdk.PixbufLoader()
@@ -961,12 +961,12 @@ class PlayerTab(ObservableService, gtk.HBox):
                 pixbuf = pixbuf.scale_simple(self.config.getint("options", "cover_height"),
                     self.config.getint("options", "cover_height"), gtk.gdk.INTERP_BILINEAR )
                 self.set_coverart(pixbuf)
-            except Exception, e:
+            except Exception as e:
                 self.__log.exception('Error setting coverart...')
 
         # set the text metadata
-        for tag,value in tag_message.iteritems():
-            if tags.has_key(tag) and value is not None and value.strip():
+        for tag,value in tag_message.items():
+            if tag in tags and value is not None and value.strip():
                 if tag == "artist":
                     _str = '<big>' + cgi.escape(value) + '</big>'
                 elif tag == "album":
@@ -981,7 +981,7 @@ class PlayerTab(ObservableService, gtk.HBox):
                 
                 try:
                     tags[tag].set_markup(_str)
-                except TypeError, e:
+                except TypeError as e:
                     self.__log.exception(str(e))
                 tags[tag].set_alignment( 0.5*int(not self.has_coverart), 0.5)
                 tags[tag].show()

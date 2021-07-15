@@ -21,7 +21,7 @@
 #  Copyright (c) 2008-05-26 Thomas Perl <thpinfo.com>
 #  (based on http://pygstdocs.berlios.de/pygst-tutorial/seeking.html)
 
-from __future__ import absolute_import
+
 
 import logging
 
@@ -299,7 +299,7 @@ class PlaylistTab(gtk.VBox):
     def show_playlist_item_details(self, w):
         selection = self.treeview.get_selection()
         if selection.count_selected_rows() == 1:
-            selected = self.__cur_selection().next()
+            selected = next(self.__cur_selection())
             model, bkmk_id, bkmk_iter, item_id, item_iter = selected
             playlist_item = self.playlist.get_item_by_id(item_id)
             PlaylistItemDetails(self.main, playlist_item)

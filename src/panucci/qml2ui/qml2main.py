@@ -3,7 +3,7 @@
 import sys
 import os
 import logging
-import ConfigParser
+import configparser
 
 from PyQt5 import QtCore
 from PyQt5 import QtGui
@@ -317,7 +317,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
             if not self.playlist.save_to_new_playlist(os.path.expanduser(value), ext):
                 # FIX ME!
                 #self.notify(_('Error saving playlist...'))
-                print _('Error saving playlist...')
+                print(_('Error saving playlist...'))
         elif action == "play_one":
             if os.path.exists(os.path.expanduser(value)):
                 self.clear_playlist_callback()
@@ -452,28 +452,28 @@ class PanucciGUI(QtCore.QObject, ObservableService):
         self.view.rootObject().property("root").openSettings()
 
     def lock_progress_callback(self):
-        self.set_config_option("lock_progress", unicode(self.action_lock_progress.isChecked()).lower())
+        self.set_config_option("lock_progress", str(self.action_lock_progress.isChecked()).lower())
 
     def dual_action_callback(self):
-        self.set_config_option("dual_action_button", unicode(self.action_dual_action.isChecked()).lower())
+        self.set_config_option("dual_action_button", str(self.action_dual_action.isChecked()).lower())
 
     def stay_at_end_callback(self):
-        self.set_config_option("stay_at_end", unicode(self.action_stay_at_end.isChecked()).lower())
+        self.set_config_option("stay_at_end", str(self.action_stay_at_end.isChecked()).lower())
 
     def seek_back_callback(self):
-        self.set_config_option("seek_back", unicode(self.action_seek_back.isChecked()).lower())
+        self.set_config_option("seek_back", str(self.action_seek_back.isChecked()).lower())
 
     def scrolling_labels_callback(self):
-        self.set_config_option("scrolling_labels", unicode(self.action_scrolling_labels.isChecked()).lower())
+        self.set_config_option("scrolling_labels", str(self.action_scrolling_labels.isChecked()).lower())
         self.view.rootObject().property("root").start_scrolling_timer(self.config.getboolean("options", "scrolling_labels"))
 
     def resume_all_callback(self):
-        self.set_config_option("resume_all", unicode(self.action_resume_all.isChecked()).lower())
+        self.set_config_option("resume_all", str(self.action_resume_all.isChecked()).lower())
         if not self.action_resume_all.isChecked():
             self.playlist.reset_all_seek_to()
 
     def play_on_headset_callback(self):
-        self.set_config_option("play_on_headset", unicode(self.action_play_on_headset.isChecked()).lower())
+        self.set_config_option("play_on_headset", str(self.action_play_on_headset.isChecked()).lower())
 
     def play_mode_all_callback(self):
         self.set_config_option("play_mode", "all")
@@ -525,7 +525,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
         self.playlist.prev()
 
     def player_skip_forward_callback(self):
-        self.playlist.next()
+        next(self.playlist)
 
     def player_play_callback(self):
         self.playlist.play_pause_toggle()
@@ -596,7 +596,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
             self.view.rootObject().property("root").set_text_x()
 
     def get_cover_str(self):
-        if self.metadata and self.metadata.has_key('image') and self.metadata['image']:
+        if self.metadata and 'image' in self.metadata and self.metadata['image']:
             self.image = self.metadata['image']
             return "image://cover/" + os.urandom(10)
         else:
@@ -697,7 +697,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
                 elif self.config.get("options", "headset_button") == "long":
                     self.do_seek(self.config.getint("options", "seek_long"))
                 else:
-                    self.playlist.next()
+                    next(self.playlist)
 
     def handle_headset_bt_connection_state(self, device_path):
         if device_path == self.headset_bt_path and self.config.getboolean("options", "play_on_headset") and not self.playlist.playing:
@@ -720,7 +720,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
                 elif self.config.get("options", "headset_button") == "long":
                     self.do_seek(self.config.getint("options", "seek_long"))
                 else:
-                    self.playlist.next()
+                    next(self.playlist)
 
 class ImageProvider(QtQuick.QQuickImageProvider):
     def __init__(self, main):
@@ -760,7 +760,7 @@ class PlaylistItem(QtCore.QObject):
         return self._position
 
     item_id = QtCore.pyqtProperty(str, _get_id, notify=changed)
-    caption = QtCore.pyqtProperty(unicode, _get_caption, notify=changed)
+    caption = QtCore.pyqtProperty(str, _get_caption, notify=changed)
     bookmark_id = QtCore.pyqtProperty(str, _get_bookmark, notify=changed)
     position = QtCore.pyqtProperty(str, _get_position, notify=changed)
 
@@ -787,8 +787,8 @@ class FilechooserItem(QtCore.QObject):
     def _get_directory(self):
         return self._directory
 
-    caption = QtCore.pyqtProperty(unicode, _get_caption, notify=changed)
-    path = QtCore.pyqtProperty(unicode, _get_path, notify=changed)
+    caption = QtCore.pyqtProperty(str, _get_caption, notify=changed)
+    path = QtCore.pyqtProperty(str, _get_path, notify=changed)
     directory = QtCore.pyqtProperty(bool, _get_directory, notify=changed)
 
 class ThemeController(QtCore.QObject):
@@ -796,7 +796,7 @@ class ThemeController(QtCore.QObject):
         QtCore.QObject.__init__(self)
 
         self.config = config
-        self.config_theme = ConfigParser.SafeConfigParser()
+        self.config_theme = configparser.SafeConfigParser()
         #_file = open(util.find_data_file("theme-all.conf"))
         #self.config.readfp(_file)
         #_file.close()

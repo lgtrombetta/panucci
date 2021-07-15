@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import logging
 import dbus
@@ -42,7 +42,7 @@ class panucciInterface(dbus.service.Object):
             bus = dbus.SystemBus()
             headset = bus.get_object(self.HEADSET_NAME, self.HEADSET_PATH)
             self.headset_device = dbus.Interface(headset, self.HEADSET_INTF)
-        except Exception, e:
+        except Exception as e:
             self.__log.debug('Could not find headset object (on Maemo)')
 
     def register_playlist(self, playlist):
@@ -84,7 +84,7 @@ class panucciInterface(dbus.service.Object):
     @dbus.service.method('org.panucci.panucciInterface')
     def playNext(self):
         self.__log.debug('playNext() called')
-        if self.playlist: self.playlist.next()
+        if self.playlist: next(self.playlist)
 
     @dbus.service.method('org.panucci.panucciInterface')
     def playPrev(self):

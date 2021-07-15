@@ -7,7 +7,7 @@ This module provides enough functionality to create a frontend to control
 Panucci as well as exporting a large portion of the Panucci API over D-Bus.
 """
 
-from __future__ import absolute_import
+
 
 import dbus
 import logging
@@ -66,7 +66,7 @@ class PanucciAPI(services.ForwardingObservableService, dbus.service.Object):
                          "end-of-file"  : "eof",
                          "stopped"      : "stopped", }
 
-    signals = player_signals.keys() + playlist_signals.keys()
+    signals = list(player_signals.keys()) + list(playlist_signals.keys())
 
     def __init__(self):
         self.__log = logging.getLogger("panucci.api.PanucciAPI")

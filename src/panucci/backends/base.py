@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import logging
 
@@ -45,7 +45,7 @@ class BasePlayer(services.ObservableService):
            describes the error.
     """
     signals = [ 'playing', 'paused', 'stopped', 'eof', 'error' ]
-    STATE_PLAYING, STATE_PAUSED, STATE_STOPPED, STATE_NULL = range(4)
+    STATE_PLAYING, STATE_PAUSED, STATE_STOPPED, STATE_NULL = list(range(4))
 
     def __init__(self):
         self.__log = logging.getLogger('panucci.backends.BasePlayer')

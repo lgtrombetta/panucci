@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+
 
 import time
 import os
@@ -110,16 +110,16 @@ class Playlist(ObservableService):
     def print_queue_layout(self):
         """ This helps with debugging ;) """
         for item in self.__queue:
-            print str(item), item.playlist_reported_filepath
+            print(str(item), item.playlist_reported_filepath)
             for bookmark in item.bookmarks:
-                print '\t', str(bookmark), bookmark.bookmark_filepath
+                print('\t', str(bookmark), bookmark.bookmark_filepath)
 
     def save_to_new_playlist(self, filepath, playlist_type='m3u'):
         self.filepath = filepath
         self._id = None
 
         playlist = { 'm3u': playlistformat.M3U_Playlist, 'pls': playlistformat.PLS_Playlist }
-        if not playlist.has_key(playlist_type):
+        if playlist_type not in playlist:
             playlist_type = 'm3u' # use m3u by default
             self.filepath += '.m3u'
 
@@ -421,7 +421,7 @@ class Playlist(ObservableService):
         else:
             parsers = {'m3u': playlistformat.M3U_Playlist, 'pls': playlistformat.PLS_Playlist}
             extension = util.detect_filetype(filepath)
-            if parsers.has_key(extension): # importing a playlist
+            if extension in parsers: # importing a playlist
                 self.__log.info('Loading playlist file (%s)', extension)
                 parser = parsers[extension](filepath, self.__queue)
                 self.filepath = filepath
@@ -613,7 +613,7 @@ class Playlist(ObservableService):
 
     def random(self, set_seek_to=True):
         """ Plays random file in queue. """
-        skip_to = random.choice(range(len(self.__queue.get_items())))
+        skip_to = random.choice(list(range(len(self.__queue.get_items()))))
         return self.skip(False, None, skip_to, set_seek_to)
 
     ##################################
@@ -829,7 +829,7 @@ class Queue(list, ObservableService):
         """ Reset the the queue to a known state """
 
         try:
-            items = self.__mapping_dict.values()
+            items = list(self.__mapping_dict.values())
             for item in items:
               list.remove(self, item)
         except:
@@ -844,7 +844,7 @@ class Queue(list, ObservableService):
         return self.__mapping_dict.get(item_id)
 
     def get_items(self):
-        return self.__mapping_dict.values()
+        return list(self.__mapping_dict.values())
 
     def is_empty(self):
         if self.__mapping_dict:

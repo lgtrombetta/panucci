@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+
 
 import os.path
 from sys import argv
-from urllib import quote
+from urllib.parse import quote
 
 def convert_ns(time_int):
     """Convert nanosecond values into strings

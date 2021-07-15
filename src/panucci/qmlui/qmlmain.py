@@ -19,7 +19,7 @@
 import sys
 import os
 import logging
-import ConfigParser
+import configparser
 
 from PySide import QtCore
 from PySide import QtGui
@@ -348,7 +348,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
             if not self.playlist.save_to_new_playlist(os.path.expanduser(value), ext):
                 # FIX ME!
                 #self.notify(_('Error saving playlist...'))
-                print _('Error saving playlist...')
+                print(_('Error saving playlist...'))
         elif action == "play_one":
             if os.path.exists(os.path.expanduser(value)):
                 self.clear_playlist_callback()
@@ -524,7 +524,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
         self.playlist.prev()
 
     def player_skip_forward_callback(self):
-        self.playlist.next()
+        next(self.playlist)
 
     def player_play_callback(self):
         self.playlist.play_pause_toggle()
@@ -589,7 +589,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
             self.view.rootObject().property("root").set_text_x()
 
     def get_cover_str(self):
-        if self.metadata and self.metadata.has_key('image') and self.metadata['image']:
+        if self.metadata and 'image' in self.metadata and self.metadata['image']:
             return "image://cover/" + os.urandom(10)
         else:
             return ""
@@ -688,7 +688,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
                 elif self.config.get("options", "headset_button") == "long":
                     self.do_seek(self.config.getint("options", "seek_long"))
                 else:
-                    self.playlist.next()
+                    next(self.playlist)
 
     def handle_headset_bt_connection_state(self, device_path):
         if device_path == self.headset_bt_path and self.config.getboolean("options", "play_on_headset") and not self.playlist.playing:
@@ -711,7 +711,7 @@ class PanucciGUI(QtCore.QObject, ObservableService):
                 elif self.config.get("options", "headset_button") == "long":
                     self.do_seek(self.config.getint("options", "seek_long"))
                 else:
-                    self.playlist.next()
+                    next(self.playlist)
 
 class ImageProvider(QtDeclarative.QDeclarativeImageProvider):
     def __init__(self, main):
@@ -751,7 +751,7 @@ class PlaylistItem(QtCore.QObject):
         return self._position
 
     item_id = QtCore.Property(str, _get_id, notify=changed)
-    caption = QtCore.Property(unicode, _get_caption, notify=changed)
+    caption = QtCore.Property(str, _get_caption, notify=changed)
     bookmark_id = QtCore.Property(str, _get_bookmark, notify=changed)
     position = QtCore.Property(str, _get_position, notify=changed)
 
@@ -778,8 +778,8 @@ class FilechooserItem(QtCore.QObject):
     def _get_directory(self):
         return self._directory
 
-    caption = QtCore.Property(unicode, _get_caption, notify=changed)
-    path = QtCore.Property(unicode, _get_path, notify=changed)
+    caption = QtCore.Property(str, _get_caption, notify=changed)
+    path = QtCore.Property(str, _get_path, notify=changed)
     directory = QtCore.Property(bool, _get_directory, notify=changed)
 
 class ThemeController(QtCore.QObject):
@@ -787,7 +787,7 @@ class ThemeController(QtCore.QObject):
         QtCore.QObject.__init__(self)
 
         self.config = config
-        self.config_theme = ConfigParser.SafeConfigParser()
+        self.config_theme = configparser.SafeConfigParser()
         #_file = open(util.find_data_file("theme-all.conf"))
         #self.config.readfp(_file)
         #_file.close()

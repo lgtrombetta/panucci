@@ -2,33 +2,33 @@
 
 import sys
 import os
-import ConfigParser
+import configparser
 
 if len(sys.argv) != 2:
-    print >>sys.stderr, """
+    print("""
     Usage: %s <device>
-    """ % sys.argv[0]
+    """ % sys.argv[0], file=sys.stderr)
     sys.exit(1)
 
 appname, device = sys.argv
 
 root = os.path.dirname(__file__)
-devices = ConfigParser.ConfigParser()
+devices = configparser.ConfigParser()
 devices.read([os.path.join(root, 'doc', 'devices.ini')])
 
 if device not in devices.sections():
-    print 'Unknown device:', device
+    print('Unknown device:', device)
     sys.exit(2)
 
 files_to_update = ['panucci.conf', 'default.conf']
 files_to_update = [os.path.join(root, 'data', x) for x in files_to_update]
 
 def config_from_file(filename):
-    parser = ConfigParser.ConfigParser()
+    parser = configparser.ConfigParser()
     parser.read([filename])
     return parser
 
-parsers = map(config_from_file, files_to_update)
+parsers = list(map(config_from_file, files_to_update))
 
 for key, value in devices.items(device):
     for parser in parsers:

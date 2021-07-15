@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 from gi.repository import GObject as gobject
 from gi.repository import Pango as pango
 from gi.repository import Gtk as gtk
@@ -48,7 +48,7 @@ class DualActionButton(gtk.Button):
                          duration=DURATION)
     window.add(b)
     """
-    (DEFAULT, LONGPRESS) = range(2)
+    (DEFAULT, LONGPRESS) = list(range(2))
 
     def __init__(self, default_widget, default_action, config,
                        longpress_widget=None, longpress_action=None):
@@ -301,7 +301,7 @@ class ScrollingLabel(gtk.DrawingArea):
             PangoCairo.show_layout(self.__graphics_context, self.__pango_layout)
             lbl_x, lbl_y = self.__pango_layout.get_pixel_size()
             #self.set_size_request( -1, lbl_y )
-            print lbl_x, lbl_y
+            print(lbl_x, lbl_y)
         
         self.__graphics_context.move_to(0, 0)
         

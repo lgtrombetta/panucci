@@ -31,10 +31,10 @@ SCRIPTS = glob.glob('bin/*')
 
 if not os.path.exists('panucci.service') and \
     'clean' not in sys.argv and 'sdist' not in sys.argv:
-    print >>sys.stderr, """
+    print("""
     build/panucci.service not found. Maybe you want to run
     "make install" instead of using setup.py directly?
-    """
+    """, file=sys.stderr)
     sys.exit(1)
 
 DATA_FILES = [
@@ -54,10 +54,10 @@ DATA_FILES = [
 mo_files = glob.glob('build/locale/*/LC_MESSAGES/panucci.mo')
 
 if len(mo_files) == 0:
-    print >>sys.stderr, """
+    print("""
     Warning: No translation files found. Maybe you want to
     run "make install" instead of using setup.py directly?
-    """
+    """, file=sys.stderr)
 
 for mofile in mo_files:
     modir = os.path.dirname(mofile).replace('build', 'share')

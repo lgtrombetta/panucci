@@ -22,7 +22,7 @@
 #  2009-02-13 - nikosapi: made ObservableService more Panucci-esque
 #
 
-from __future__ import absolute_import
+
 
 from logging import getLogger
 
@@ -130,7 +130,7 @@ class ForwardingObservableService(ObservableService):
         elif isinstance( signal_names, dict ):
             signals = signal_names
 
-        for to_name, from_name in signals.iteritems():
+        for to_name, from_name in signals.items():
             from_object.register( from_name, self._forward( to_name, caller ))
 
     def _forward( self, emitted_signal_name, caller ):

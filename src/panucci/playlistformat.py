@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+
 
 import logging
 import time
@@ -30,7 +30,7 @@ class PlaylistFile(object):
         try:
             self._file = open( filepath, mode )
             self._filepath = filepath
-        except Exception, e:
+        except Exception as e:
             self._filepath = None
             self._file = None
 
@@ -45,7 +45,7 @@ class PlaylistFile(object):
         if self._file is not None:
             try:
                 self._file.close()
-            except Exception, e:
+            except Exception as e:
                 self.__log.exception( 'Error closing file: %s', self.filepath )
                 error = True
 
@@ -404,7 +404,7 @@ class Bookmark(object):
     def load_from_dict(bkmk_dict):
         bkmkobj = Bookmark()
 
-        for key,value in bkmk_dict.iteritems():
+        for key,value in bkmk_dict.items():
             if hasattr( bkmkobj, key ):
                 setattr( bkmkobj, key, value )
             else:
@@ -499,7 +499,7 @@ class FileMetadata(object):
                     self.artist = podcast
                     self.__metadata_extracted = True
                     return True
-        except Exception, e:
+        except Exception as e:
             self.__log.debug('Cannot get metadata from gPodder: %s', str(e))
 
         return False
@@ -530,21 +530,21 @@ class FileMetadata(object):
         try:
             metadata = meta_parser.Open(self.__filepath)
             self.__metadata_extracted = True
-        except Exception, e:
+        except Exception as e:
             self.title = util.pretty_filename(self.__filepath)
             self.__log.exception('Error running metadata parser...')
             self.__metadata_extracted = False
             return False
 
         self.length = metadata.info.length * 10**9
-        for tag in self.tag_mappings[self.filetype].keys():
+        for tag in list(self.tag_mappings[self.filetype].keys()):
             value = None
             if self.filetype in ["ogg", "flac", "opus"]:
                 for _tup in metadata.tags:
-                    if tag == unicode(_tup[0]).lower():
+                    if tag == str(_tup[0]).lower():
                         value = _tup[1]
             else:
-                for _key in metadata.tags.keys():
+                for _key in list(metadata.tags.keys()):
                     _tag = _key
                     if ":" in _key:
                         _tag = _key.split(":")[0]
@@ -555,8 +555,8 @@ class FileMetadata(object):
             if value:
                 if self.tag_mappings[self.filetype][tag] != 'coverart':
                     try:
-                        value = escape(unicode(value).strip().encode("utf-8"))
-                    except Exception, e:
+                        value = escape(str(value).strip().encode("utf-8"))
+                    except Exception as e:
                         self.__log.exception(
                           'Could not convert tag (%s) to escaped string', tag )
                 else:
@@ -679,7 +679,7 @@ class FileMetadata(object):
         metadata["album"] = _metadata["album"]
         metadata.save()
 
-        for tag in _metadata.keys():
+        for tag in list(_metadata.keys()):
             if tag not in ["length", "image"]:
                 setattr( self, tag, _metadata[tag].encode("utf-8") )
 
@@ -701,7 +701,7 @@ class FileMetadata(object):
             elif self.filetype == "mp3":
                 from mutagen.id3 import ID3, APIC
                 metadata = ID3(self.__filepath)
-                metadata.add(APIC(encoding=3, type=3, desc=u'Cover', data=_data))
+                metadata.add(APIC(encoding=3, type=3, desc='Cover', data=_data))
             elif self.filetype in ['mp4', 'm4a']:
                 from mutagen.mp4 import MP4, MP4Cover
                 metadata = MP4(self.__filepath)

@@ -16,7 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
 
 import logging
 import os.path
@@ -901,7 +903,7 @@ class PlayerTab(ObservableService, gtk.HBox):
                  'album': self.album_label }
 
         # set the coverart
-        if tag_message.has_key('image') and tag_message['image'] is not None:
+        if 'image' in tag_message and tag_message['image'] is not None:
             value = tag_message['image']
 
             pbl = GdkPixbuf.PixbufLoader.new()
@@ -912,12 +914,12 @@ class PlayerTab(ObservableService, gtk.HBox):
                 pixbuf = pixbuf.scale_simple(self.config.getint("options", "cover_height"),
                     self.config.getint("options", "cover_height"), GdkPixbuf.InterpType.BILINEAR )
                 self.set_coverart(pixbuf)
-            except Exception, e:
+            except Exception as e:
                 self.__log.exception('Error setting coverart...')
 
         # set the text metadata
-        for tag,value in tag_message.iteritems():
-            if tags.has_key(tag) and value is not None and value.strip():
+        for tag,value in tag_message.items():
+            if tag in tags and value is not None and value.strip():
                 if tag == "artist":
                     _str = '<big>' + cgi.escape(value) + '</big>'
                 elif tag == "album":
@@ -932,7 +934,7 @@ class PlayerTab(ObservableService, gtk.HBox):
                 
                 try:
                     tags[tag].set_markup(_str)
-                except TypeError, e:
+                except TypeError as e:
                     self.__log.exception(str(e))
                 tags[tag].set_alignment( 0.5*int(not self.has_coverart), 0.5)
                 tags[tag].show()

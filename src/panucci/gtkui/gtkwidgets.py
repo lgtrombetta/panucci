@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import gtk
 import gobject
@@ -46,7 +46,7 @@ class DualActionButton(gtk.Button):
                          duration=DURATION)
     window.add(b)
     """
-    (DEFAULT, LONGPRESS) = range(2)
+    (DEFAULT, LONGPRESS) = list(range(2))
 
     def __init__(self, default_widget, default_action, config,
                        longpress_widget=None, longpress_action=None):

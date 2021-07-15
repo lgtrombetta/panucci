@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import logging
 import os.path
-import ConfigParser
+import configparser
 
 import panucci
 from panucci import util
@@ -38,7 +38,7 @@ if not os.path.exists(panucci.THEME_FILE):
 class Settings(object):
     def __init__(self):
         self.__log = logging.getLogger('panucci.settings.Settings')
-        self.config = ConfigParser.SafeConfigParser()
+        self.config = configparser.SafeConfigParser()
         # Parse everything
         _file = open(util.find_data_file("default.conf"))
         self.config.readfp(_file)

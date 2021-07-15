@@ -21,7 +21,7 @@
 #  Copyright (c) 2008-05-26 Thomas Perl <thpinfo.com>
 #  (based on http://pygstdocs.berlios.de/pygst-tutorial/seeking.html)
 
-from __future__ import absolute_import
+
 
 import dbus
 import dbus.glib
@@ -52,7 +52,7 @@ def run(opts, args):
         if session_bus.name_has_owner('org.panucci.panucciInterface'):
             remote_object = session_bus.get_object(
                 'org.panucci.panucciInterface', '/panucciInterface' )
-            print 'Found panucci instance already running, will try to use it...'
+            print('Found panucci instance already running, will try to use it...')
         else:
             remote_object = None
     except dbus.exceptions.DBusException:

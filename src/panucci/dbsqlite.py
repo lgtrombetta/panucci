@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import os.path
 import logging
@@ -53,7 +53,7 @@ class Storage(object):
         try:
             self.__log.debug('COMMIT')
             self.db.commit()
-        except ProgrammingError, e:
+        except ProgrammingError as e:
             self.__log.error('Error commiting changes!', exc_info=1)
 
     def __check_schema(self):

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import logging
 import os.path
@@ -404,7 +404,7 @@ class PlayerTab(ObservableService):
                                                       QtGui.QIcon(util.find_data_file('media-skip-forward.png')),
                                                       self.button_fforward_callback,
                                          QtGui.QIcon(util.find_data_file("gtk-goto-last-ltr.png")),
-                                         self.playlist.next)
+                                         self.playlist.__next__)
         self.button_bookmark = QtGui.QPushButton(QtGui.QIcon(util.find_data_file('bookmark-new.png')), "")
         self.button_bookmark.clicked.connect(self.button_bookmark_callback)
 
@@ -547,7 +547,7 @@ class PlayerTab(ObservableService):
                  'album': self.label_album }
 
         # set the coverart
-        if tag_message.has_key('image') and tag_message['image'] is not None:
+        if 'image' in tag_message and tag_message['image'] is not None:
             value = tag_message['image']
 
             try:
@@ -558,12 +558,12 @@ class PlayerTab(ObservableService):
                 self.label_cover.setPixmap(pixmap)
                 self.label_cover.show()
                 self.has_coverart = True
-            except Exception, e:
+            except Exception as e:
                 self.__log.exception('Error setting coverart...')
 
         # set the text metadata
-        for tag,value in tag_message.iteritems():
-            if tags.has_key(tag) and value is not None and value.strip():
+        for tag,value in tag_message.items():
+            if tag in tags and value is not None and value.strip():
                 value = value.decode('utf-8')
                 if tag == "artist":
                     _str = '<big>' + value + '</big>'
@@ -583,7 +583,7 @@ class PlayerTab(ObservableService):
                     tags[tag].setAlignment(QtCore.Qt.AlignLeft)
                 try:
                     tags[tag].setText(_str)
-                except TypeError, e:
+                except TypeError as e:
                     self.__log.exception(str(e))
                 
                 tags[tag].show()

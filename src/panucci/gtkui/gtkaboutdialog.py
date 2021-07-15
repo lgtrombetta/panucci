@@ -35,7 +35,7 @@ _ = lambda x: x
 class HeAboutDialog(gtk.Dialog):
     RESPONSE_WEBSITE, \
     RESPONSE_BUGTRACKER, \
-    RESPONSE_DONATE = range(3)
+    RESPONSE_DONATE = list(range(3))
 
     def __init__(self):
         gtk.Dialog.__init__(self)

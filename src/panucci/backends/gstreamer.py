@@ -16,9 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Panucci.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
 
-import gobject
+from gi.repository import GObject as gobject
+#import gobject
 import gst
 import logging
 import time
@@ -44,7 +44,7 @@ class Player(base.BasePlayer):
             else:
                 pos_int = self.__player.query_position(gst.FORMAT_TIME, None)[0]
             dur_int = self.__player.query_duration(gst.FORMAT_TIME, None)[0]
-        except Exception, e:
+        except Exception as e:
             self.__log.exception('Error getting position...')
             pos_int = dur_int = 0
         return pos_int, dur_int
@@ -98,7 +98,7 @@ class Player(base.BasePlayer):
         error = False
         try:
             self.__player.seek_simple(gst.FORMAT_TIME, gst.SEEK_FLAG_FLUSH, position)
-        except Exception, e:
+        except Exception as e:
             self.__log.exception( 'Error seeking' )
             error = True
         self.seeking = False
